@@ -122,6 +122,8 @@ public abstract class Block {
 	public abstract boolean connectHeatInOut(int inoutside);
 
 
+	public abstract boolean needUpdate();
+
 
 	public abstract void loadImage();
 
