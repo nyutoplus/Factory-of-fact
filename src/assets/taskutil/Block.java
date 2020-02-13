@@ -47,6 +47,27 @@ public abstract class Block {
 
 	public static final int INOUT_ALL_SIDE = 0xFF;
 
+	public int posx;
+
+	public int posy;
+
+	public Block(int x,int y) {
+		setPos(x,y);
+	}
+
+	public void setPos(int x,int y) {
+		posx = x;
+		posy = y;
+	}
+
+	public int getX() {
+		return posx;
+	}
+
+	public int getY() {
+		return posy;
+	}
+
 
 	public abstract HitBox getHitBox();
 
