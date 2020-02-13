@@ -16,20 +16,11 @@ public class Imageset {
 	private Image[] images;
 
 
-	public Imageset(Image image) {
+	public Imageset(Image... image) {
 		updateImage(image);
 	}
 
-	public Imageset(Image[] images) {
-		updateImage(images);
-	}
-
-	public void updateImage(Image image) {
-		Image[] tmp = {image};
-		updateImage(tmp);
-	}
-
-	public void updateImage(Image[] images) {
+	public void updateImage(Image... images) {
 		if(images == null)return;
 		this.images = images;
 	}
