@@ -16,8 +16,20 @@ public abstract class ChunkGenerator {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 
+	private long seed;
 
-	public abstract void setSeed(long seed);
+	public ChunkGenerator(long seed) {
+		setSeed(seed);
+	}
+
+
+	public void setSeed(long seed) {
+		this.seed = seed;
+	}
+
+	public long getSeed() {
+		return seed;
+	}
 
 	public abstract Chunk getChunk(int x,int y);
 
