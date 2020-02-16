@@ -2,7 +2,7 @@
  * デバッグ用メソッドです
  * 時間、開始からの経過時間(ms)呼び出したクラスも追加で表示します
  *
- * @version 1.5
+ * @version 1.6
  * @author nyuto
  */
 
@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 public class Logger extends PrintStream{
 	@SuppressWarnings("unused")
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 5L;
 
 	private Long upTime = System.currentTimeMillis();
 
@@ -58,6 +58,10 @@ public class Logger extends PrintStream{
 	private NumberFormat nf = NumberFormat.getNumberInstance();
 
 	private String sep = System.lineSeparator();
+
+	private String tColor = "\u001b[38;2;0;0;0m";
+
+	private String oneColor;
 
 	private StringBuilder builder[];
 
@@ -300,7 +304,7 @@ public class Logger extends PrintStream{
 	 * デフォルトの文字色に戻します
 	 */
 	public void setDefaultTextColor() {
-		textColor = new Color(0,0,0);
+		tColor = "\u001b[38;2;0;0;0m";
 	}
 
 	/**
@@ -312,7 +316,7 @@ public class Logger extends PrintStream{
 			setDefaultTextColor();
 			return;
 		}
-		textColor = color;
+		tColor = "\u001b[38;2;" + color.getRed() + ";" + color.getGreen() + ";" + color.getBlue() + "m";
 	}
 
 	/**
@@ -324,7 +328,7 @@ public class Logger extends PrintStream{
 	 * @throws IllegalArgumentException
 	 */
 	public void setTextColor(int r,int g,int b) {
-		textColor = new Color(r,g,b);
+		tColor = "\u001b[38;2;" + r + ";" + g + ";" + b + "m";
 	}
 
 	/**
@@ -333,7 +337,7 @@ public class Logger extends PrintStream{
 	 */
 	public void setTextColorOnece(Color color) {
 		if(color == null)return;
-		oneceColor = color;
+		oneColor = "\u001b[38;2;" + color.getRed() + ";" + color.getGreen() + ";" + color.getBlue() + "m";
 		oneceFlag = true;
 	}
 
@@ -346,13 +350,8 @@ public class Logger extends PrintStream{
 	 * @throws IllegalArgumentException
 	 */
 	public void setTextColorOnece(int r,int g,int b) {
-		try {
-			oneceColor = new Color(r,g,b);
-			oneceFlag = true;
-		}catch(IllegalArgumentException e) {
-			oneceFlag = false;
-			throw e;
-		}
+		oneColor = "\u001b[38;2;" + r + ";" + g + ";" + b + "m";
+		oneceFlag = true;
 	}
 
 	public void print(boolean b) {
@@ -476,11 +475,10 @@ public class Logger extends PrintStream{
 	}
 
 	private void pl(String level,String str) {
-		Color color = oneceFlag?oneceColor:textColor;
-		oneceFlag = false;
 		int pos = getPos();
 		StringBuilder builder = this.builder[pos];
-		builder.append("\u001b[38;2;" + color.getRed() + ";" + color.getGreen() + ";" + color.getBlue() + "m");
+		builder.append(oneceFlag?oneColor:tColor);
+		oneceFlag = false;
 		synchronized(sdf) {
 			builder.append(showDate ? "[" + sdf.format(Calendar.getInstance().getTime()) + "]" : "");
 		}
@@ -496,11 +494,10 @@ public class Logger extends PrintStream{
 	}
 
 	private void pr(String level,String str) {
-		Color color = oneceFlag?oneceColor:textColor;
-		oneceFlag = false;
 		int pos = getPos();
 		StringBuilder builder = this.builder[pos];
-		builder.append("\u001b[38;2" + ";" + color.getRed() + ";" + color.getGreen() + ";" + color.getBlue() + "m");
+		builder.append(oneceFlag?oneColor:tColor);
+		oneceFlag = false;
 		synchronized(sdf) {
 			builder.append(showDate ? "[" + sdf.format(Calendar.getInstance().getTime()) + "]" : "");
 		}
@@ -516,9 +513,8 @@ public class Logger extends PrintStream{
 	}
 
 	private void napl(String str) {
-		Color color = oneceFlag?oneceColor:textColor;
+		String text = oneceFlag?oneColor:tColor;
 		oneceFlag = false;
-		String text = "\u001b[38;2" + ";" + color.getRed() + ";" + color.getGreen() + ";" + color.getBlue() + "m";
 		if(!showMessage) {
 			text += str;
 		}
@@ -527,9 +523,8 @@ public class Logger extends PrintStream{
 	}
 
 	private void napr(String str) {
-		Color color = oneceFlag?oneceColor:textColor;
+		String text = oneceFlag?oneColor:tColor;
 		oneceFlag = false;
-		String text = "\u001b[38;2" + ";" + color.getRed() + ";" + color.getGreen() + ";" + color.getBlue() + "m";
 		if(showMessage) {
 			text += str;
 		}
