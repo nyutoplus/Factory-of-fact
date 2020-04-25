@@ -3,7 +3,7 @@
  * java.util.Randomの拡張版です
  * 乱数の周期を伸ばし、更にランダム性を高めました。
  *
- * @version 1.2
+ * @version 1.3
  * @author nyuto
  */
 
@@ -13,7 +13,7 @@ package assets.util;
 import java.nio.ByteBuffer;
 
 public class Random extends java.util.Random{
-	private static final long serialVersionUID = 21L;
+	private static final long serialVersionUID = 22L;
 
 	private long seed;
 
@@ -144,14 +144,14 @@ public class Random extends java.util.Random{
 		bb.putLong(System.nanoTime());
 		bb.putLong(System.currentTimeMillis());
 		seed.put(hash.getHash(bb.array()));
-		return seed.getLong();
+		return seed.getLong(0);
 	}
 
 	private static long genSeed(String str) {
 		HashXX hash = new HashXX(8);
 		ByteBuffer seed = ByteBuffer.allocate(8);
 		seed.put(hash.getHash(str));
-		return seed.getLong();
+		return seed.getLong(0);
 	}
 
 	public synchronized void setSeed(long seed) {
